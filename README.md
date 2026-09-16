@@ -51,7 +51,7 @@ Any signed-in teammate can see and edit all saved syntheses (last-write-wins); o
 ## Tech stack
 
 - **Framework:** Next.js 14 (App Router), TypeScript, Tailwind CSS
-- **Model:** Gemini (`gemini-3.6-flash`) with structured JSON schema output
+- **Gen AI Model:** Gemini (`gemini-3.6-flash`) with structured JSON schema output
 - **Storage:** Browser `localStorage` (no database required); optional Supabase (Postgres + Auth + RLS) for team sharing
 - **Deployment:** Vercel. Push to GitHub, import the repo, and set `GEMINI_API_KEY`, `NEXT_PUBLIC_SUPABASE_URL`, and `NEXT_PUBLIC_SUPABASE_ANON_KEY` as environment variables.
 
