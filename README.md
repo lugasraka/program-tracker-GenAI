@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TIM Program Hub
 
-## Getting Started
+A GenAI copilot for technical program management in the Google Search
+**Sustainable Journeys** space (Travel Impact Model, contrail avoidance,
+Search sustainability).
 
-First, run the development server:
+## The problem
+
+Program synthesis is high-value PM grunt work: turning distributed,
+unstructured updates — status docs, meeting notes, Slack threads — into
+leadership-ready views of decisions, actions, risks, dependencies, and
+exec comms takes hours every week.
+
+## The solution
+
+Paste any raw program input and get an auditable, schema-constrained
+synthesis in seconds:
+
+- **Program pulse strip** — RAG status per workstream + momentum, at a glance
+- **Tracker** — decisions, action items (owner/due/priority), risks with
+  mitigations, cross-team dependencies, open questions, grouped by workstream
+- **Timeline** — Gantt-lite swimlanes with dated milestones, inline labels,
+  and a legend for crowded items; undated items stay visible in a TBD lane
+- **Dependency flow map** — upstream → blocked items, status-colored arrows
+- **Exec summary** — ready-to-send leadership brief (headline, status, asks)
+- **Exports** — "Copy for email" (rich text: formatted tables, paste straight
+  into Gmail/Outlook/Teams/Notion) and a full Markdown brief download
+- **Four seeded scenarios** — weekly status, quarterly planning, contrail
+  trial readiness review, and a raw Slack incident thread (formal docs to
+  messy chat logs)
+
+Trust principles: output is constrained by a JSON schema (Gemini structured
+output), extraction never invents owners, dates, or risks — unknowns are
+marked `TBD` — and every result is explicitly *draft-for-review*, never
+auto-published.
+
+## How to use
+
+1. Get a Gemini API key: https://aistudio.google.com/apikey
+2. Copy `.env.local.example` to `.env.local` and set `GEMINI_API_KEY`
+3. Run:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open http://localhost:3000 — load an example program (or paste your own
+   notes / upload a .txt or .md file), hit **Synthesize**, explore the four
+   tabs, then use the export bar to share the brief.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Under the hood
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Next.js 14 + TypeScript + Tailwind, styled with a Google
+Sustainable-Journeys-inspired theme (Google palette, Roboto, contrail motif;
+no official Google assets). Gemini `gemini-3.6-flash` via the Interactions
+API with schema-based structured output. localStorage persistence — no
+backend DB.
 
-## Learn More
+## v2 ideas
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Sync extracted actions to Google Sheets / GitHub Issues
+- Multi-document accumulation (delta vs. last week's synthesis)
+- Edit-in-place before export; team sharing with auth
