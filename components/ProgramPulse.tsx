@@ -1,9 +1,13 @@
 "use client";
 
 import type { SynthesisResult } from "@/lib/gemini";
-import { Badge, statusTone } from "./status";
+import { EditableText, EditableSelect, EditedChip } from "./Editable";
 
-export default function ProgramPulse({ result }: { result: SynthesisResult }) {
+type UpdateFn = (mutator: (draft: SynthesisResult) => void) => void;
+
+const MOMENTUM = ["Accelerating", "Steady", "Slowing"] as const;
+
+export default function ProgramPulse({ result, updateResult }: { result: SynthesisResult; updateResult: UpdateFn }) {
   const { execSummary, momentum, momentumReason } = result;
 
   return (
@@ -12,7 +16,18 @@ export default function ProgramPulse({ result }: { result: SynthesisResult }) {
         <h2 className="text-xs font-semibold uppercase tracking-wider text-gmuted">
           Program pulse
         </h2>
-        <Badge label={momentum} tone={statusTone(momentum)} />
+        <EditableSelect
+          value={momentum}
+          options={MOMENTUM}
+          onCommit={(next) =>
+            updateResult((d) => {
+              d.momentum = next as typeof d.momentum;
+              d.editedScalars = d.editedScalars ?? [];
+              if (!d.editedScalars.includes("momentum")) d.editedScalars.push("momentum");
+            })
+          }
+        />
+        {(result.editedScalars?.includes("momentum") || result.editedScalars?.includes("momentumReason")) && <EditedChip />}
       </div>
       <div className="flex flex-wrap gap-2">
         {execSummary.statusByWorkstream.map((s, i) => (
@@ -27,7 +42,18 @@ export default function ProgramPulse({ result }: { result: SynthesisResult }) {
           </span>
         ))}
       </div>
-      <p className="mt-2 text-xs text-gmuted">{momentumReason}</p>
+      <div className="mt-2 text-xs text-gmuted">
+        <EditableText
+          value={momentumReason}
+          onCommit={(next) =>
+            updateResult((d) => {
+              d.momentumReason = next;
+              d.editedScalars = d.editedScalars ?? [];
+              if (!d.editedScalars.includes("momentumReason")) d.editedScalars.push("momentumReason");
+            })
+          }
+        />
+      </div>
     </section>
   );
 }

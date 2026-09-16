@@ -33,6 +33,16 @@ export default function Home() {
     }
   }, []);
 
+  function updateResult(mutator: (draft: SynthesisResult) => void) {
+    setResult((prev) => {
+      if (!prev) return prev;
+      const draft = structuredClone(prev) as SynthesisResult;
+      mutator(draft);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
+      return draft;
+    });
+  }
+
   async function handleSynthesize() {
     setIsLoading(true);
     setError(null);
@@ -131,7 +141,7 @@ export default function Home() {
 
       {!isLoading && result && (
         <section className="mt-6">
-          <ProgramPulse result={result} />
+          <ProgramPulse result={result} updateResult={updateResult} />
           <ExportBar result={result} />
           <div className="mb-4 flex items-center justify-between">
             <div className="flex flex-wrap gap-1 rounded-lg bg-[#f1f3f4] p-1">
@@ -160,10 +170,10 @@ export default function Home() {
               {result.programName} · AI output — review before publishing
             </span>
           </div>
-          {tab === "tracker" && <TrackerView result={result} />}
+          {tab === "tracker" && <TrackerView result={result} updateResult={updateResult} />}
           {tab === "timeline" && <TimelineView result={result} />}
           {tab === "dependencies" && <DependencyFlow result={result} />}
-          {tab === "summary" && <ExecSummaryView result={result} />}
+          {tab === "summary" && <ExecSummaryView result={result} updateResult={updateResult} />}
         </section>
       )}
 

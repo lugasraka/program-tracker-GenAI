@@ -6,6 +6,7 @@ export type ActionItem = {
   due: string;
   workstream: string;
   priority: "High" | "Medium" | "Low";
+  edited?: boolean;
 };
 
 export type Risk = {
@@ -13,6 +14,7 @@ export type Risk = {
   severity: "High" | "Medium" | "Low";
   workstream: string;
   mitigation: string;
+  edited?: boolean;
 };
 
 export type Dependency = {
@@ -21,18 +23,28 @@ export type Dependency = {
   blocking: string;
   workstream: string;
   status: "On track" | "At risk" | "Blocked";
+  edited?: boolean;
 };
 
 export type Decision = {
   description: string;
   madeBy: string;
   date: string;
+  edited?: boolean;
 };
 
 export type OpenQuestion = {
   question: string;
   raisedBy: string;
   workstream: string;
+  edited?: boolean;
+};
+
+export type ExecStatusRow = {
+  workstream: string;
+  status: "On track" | "At risk" | "Off track";
+  note: string;
+  edited?: boolean;
 };
 
 export type SynthesisResult = {
@@ -44,9 +56,10 @@ export type SynthesisResult = {
   openQuestions: OpenQuestion[];
   momentum: "Accelerating" | "Steady" | "Slowing";
   momentumReason: string;
+  editedScalars?: string[];
   execSummary: {
     headline: string;
-    statusByWorkstream: { workstream: string; status: "On track" | "At risk" | "Off track"; note: string }[];
+    statusByWorkstream: ExecStatusRow[];
     topRisks: string[];
     asks: string[];
   };
