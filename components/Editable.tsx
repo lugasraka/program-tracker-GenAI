@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { toneClasses, type StatusTone } from "./status";
 
 type EditableTextProps = {
   value: string;
@@ -88,9 +89,10 @@ type EditableSelectProps = {
   options: readonly string[];
   onCommit: (next: string) => void;
   className?: string;
+  tone?: StatusTone;
 };
 
-export function EditableSelect({ value, options, onCommit, className = "" }: EditableSelectProps) {
+export function EditableSelect({ value, options, onCommit, className = "", tone }: EditableSelectProps) {
   const [editing, setEditing] = useState(false);
   const selectRef = useRef<HTMLSelectElement>(null);
 
@@ -119,6 +121,8 @@ export function EditableSelect({ value, options, onCommit, className = "" }: Edi
     );
   }
 
+  const chipClass = tone ? `inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium ${toneClasses[tone]}` : "";
+
   return (
     <span
       role="button"
@@ -128,7 +132,7 @@ export function EditableSelect({ value, options, onCommit, className = "" }: Edi
       onKeyDown={(e) => {
         if (e.key === "Enter") setEditing(true);
       }}
-      className={`cursor-pointer rounded transition hover:brightness-95 ${className}`}
+      className={`cursor-pointer rounded transition hover:brightness-95 ${chipClass} ${className}`}
     >
       {value}
     </span>

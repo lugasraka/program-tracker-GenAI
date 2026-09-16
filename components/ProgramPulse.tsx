@@ -1,6 +1,7 @@
 "use client";
 
 import type { SynthesisResult } from "@/lib/gemini";
+import { statusTone } from "./status";
 import { EditableText, EditableSelect, EditedChip } from "./Editable";
 
 type UpdateFn = (mutator: (draft: SynthesisResult) => void) => void;
@@ -19,6 +20,7 @@ export default function ProgramPulse({ result, updateResult }: { result: Synthes
         <EditableSelect
           value={momentum}
           options={MOMENTUM}
+          tone={statusTone(momentum)}
           onCommit={(next) =>
             updateResult((d) => {
               d.momentum = next as typeof d.momentum;

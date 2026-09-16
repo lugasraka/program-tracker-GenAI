@@ -9,9 +9,13 @@ import DependencyFlow from "@/components/DependencyFlow";
 import ExecSummaryView from "@/components/ExecSummaryView";
 import ProgramPulse from "@/components/ProgramPulse";
 import ExportBar from "@/components/ExportBar";
+import AuthButton from "@/components/AuthButton";
+import SavedList, { type SavedRow } from "@/components/SavedList";
+import { useAuthSession } from "@/lib/supabase/useAuthSession";
+import { getSupabaseBrowser } from "@/lib/supabase/client";
 import type { SynthesisResult } from "@/lib/gemini";
 
-type Tab = "tracker" | "timeline" | "dependencies" | "summary";
+type Tab = "tracker" | "timeline" | "dependencies" | "summary" | "saved";
 
 const STORAGE_KEY = "tim-hub-result";
 
@@ -21,6 +25,8 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [tab, setTab] = useState<Tab>("tracker");
+  const [savedId, setSavedId] = useState<string | null>(null);
+  const auth = useAuthSession();
 
   useEffect(() => {
     const cached = typeof window !== "undefined" ? localStorage.getItem(STORAGE_KEY) : null;
@@ -42,6 +48,20 @@ export default function Home() {
       return draft;
     });
   }
+
+  function loadSaved(row: SavedRow) {
+    setResult(row.result);
+    setSavedId(row.id);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(row.result));
+    setTab("tracker");
+  }
+
+  const [pendingShareId, setPendingShareId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const s = new URLSearchParams(window.location.search).get("s");
+    if (s) setPendingShareId(s);
+  }, []);
 
   async function handleSynthesize() {
     setIsLoading(true);
@@ -66,9 +86,32 @@ export default function Home() {
     }
   }
 
+  useEffect(() => {
+    if (!pendingShareId || !auth.user) return;
+    const supabase = getSupabaseBrowser();
+    if (!supabase) return;
+    let active = true;
+    supabase
+      .from("syntheses")
+      .select("id, program_name, result")
+      .eq("id", pendingShareId)
+      .single()
+      .then(({ data }) => {
+        if (!active || !data?.result) return;
+        setResult(data.result as SynthesisResult);
+        setSavedId(data.id);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data.result));
+        setTab("tracker");
+        setPendingShareId(null);
+      });
+    return () => {
+      active = false;
+    };
+  }, [pendingShareId, auth.user]);
+
   return (
     <main className="mx-auto max-w-5xl px-4 pb-10">
-      <header className="mb-6 -mx-4 overflow-hidden">
+      <header className="mb-6 -mx-4">
         <div className="relative bg-gradient-to-r from-sky-50 via-white to-ggreen-tint/40 px-4 py-6">
           <svg
             className="pointer-events-none absolute inset-0 h-full w-full"
@@ -112,10 +155,13 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-gborder bg-white px-3 py-1 text-xs font-medium text-gmuted">
-              <span className="h-1.5 w-1.5 rounded-full bg-ggreen" />
-              AI-drafted · review before publishing
-            </span>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-gborder bg-white px-3 py-1 text-xs font-medium text-gmuted">
+                <span className="h-1.5 w-1.5 rounded-full bg-ggreen" />
+                AI-drafted · review before publishing
+              </span>
+              <AuthButton auth={auth} />
+            </div>
           </div>
         </div>
       </header>
@@ -142,7 +188,12 @@ export default function Home() {
       {!isLoading && result && (
         <section className="mt-6">
           <ProgramPulse result={result} updateResult={updateResult} />
-          <ExportBar result={result} />
+          <ExportBar
+            result={result}
+            userEmail={auth.user?.email ?? null}
+            savedId={savedId}
+            onSaved={setSavedId}
+          />
           <div className="mb-4 flex items-center justify-between">
             <div className="flex flex-wrap gap-1 rounded-lg bg-[#f1f3f4] p-1">
               {(
@@ -151,6 +202,9 @@ export default function Home() {
                   ["timeline", "Timeline"],
                   ["dependencies", "Dependencies"],
                   ["summary", "Exec Summary"],
+                  ...(auth.configured
+                    ? ([["saved", "Saved syntheses"]] as [Tab, string][])
+                    : []),
                 ] as [Tab, string][]
               ).map(([id, label]) => (
                 <button
@@ -174,6 +228,14 @@ export default function Home() {
           {tab === "timeline" && <TimelineView result={result} />}
           {tab === "dependencies" && <DependencyFlow result={result} />}
           {tab === "summary" && <ExecSummaryView result={result} updateResult={updateResult} />}
+          {tab === "saved" && (
+            <SavedList
+              userId={auth.user?.id ?? null}
+              userEmail={auth.user?.email ?? null}
+              currentSavedId={savedId}
+              onOpen={loadSaved}
+            />
+          )}
         </section>
       )}
 

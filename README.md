@@ -1,64 +1,61 @@
 # TIM Program Hub
 
-A GenAI copilot for technical program management in the Google Search
-**Sustainable Journeys** space (Travel Impact Model, contrail avoidance,
-Search sustainability).
+A program management tool for Google Search Sustainable Journeys (Travel Impact Model, contrail avoidance, and Search sustainability). It takes unstructured updates (meeting notes, status docs, and chat logs) and extracts structured decisions, action items, risks, dependencies, and leadership briefs.
 
-## The problem
+**Live Demo:** [https://program-tracker-gen-ai.vercel.app/](https://program-tracker-gen-ai.vercel.app/)
 
-Program synthesis is high-value PM grunt work: turning distributed,
-unstructured updates — status docs, meeting notes, Slack threads — into
-leadership-ready views of decisions, actions, risks, dependencies, and
-exec comms takes hours every week.
+![TIM Program Hub Screenshot](public/screenshot2.png)
 
-## The solution
+## Features
 
-Paste any raw program input and get an auditable, schema-constrained
-synthesis in seconds:
+- **Program pulse:** RAG status and momentum by workstream
+- **Tracker:** Decisions, action items (with owner, due date, and priority), risks with mitigations, cross-team dependencies, and open questions
+- **Timeline:** Milestone swimlanes by workstream, with undated items tracked in a TBD lane
+- **Dependency flow:** Visual mapping of upstream blockers and blocked items
+- **Executive summary:** One-sentence headline, workstream statuses, and concrete asks
+- **Export options:** Rich text copy for email (Gmail, Outlook, Docs) and Markdown file export
+- **Inline editing:** Click any extracted field to edit it inline; change priorities and statuses via dropdowns; hand-edited items carry an edited tag
+- **Sample scenarios:** Built-in test inputs including weekly updates, quarterly planning, trial reviews, and incident threads
+- **Team sharing (optional):** Sign in with a magic link, save syntheses to a shared workspace, open and edit them as a team via share links
 
-- **Program pulse strip** — RAG status per workstream + momentum, at a glance
-- **Tracker** — decisions, action items (owner/due/priority), risks with
-  mitigations, cross-team dependencies, open questions, grouped by workstream
-- **Timeline** — Gantt-lite swimlanes with dated milestones, inline labels,
-  and a legend for crowded items; undated items stay visible in a TBD lane
-- **Dependency flow map** — upstream → blocked items, status-colored arrows
-- **Exec summary** — ready-to-send leadership brief (headline, status, asks)
-- **Exports** — "Copy for email" (rich text: formatted tables, paste straight
-  into Gmail/Outlook/Teams/Notion) and a full Markdown brief download
-- **Four seeded scenarios** — weekly status, quarterly planning, contrail
-  trial readiness review, and a raw Slack incident thread (formal docs to
-  messy chat logs)
+### Extraction rules
 
-Trust principles: output is constrained by a JSON schema (Gemini structured
-output), extraction never invents owners, dates, or risks — unknowns are
-marked `TBD` — and every result is explicitly *draft-for-review*, never
-auto-published.
+- Output is strictly constrained to a typed JSON schema using Gemini structured output.
+- Missing owners, dates, or risks default to `TBD` rather than hallucinated values.
+- Results are saved to browser `localStorage` and treated as review drafts.
 
-## How to use
+## Getting started
 
-1. Get a Gemini API key: https://aistudio.google.com/apikey
-2. Copy `.env.local.example` to `.env.local` and set `GEMINI_API_KEY`
-3. Run:
+1. Get an API key from [Google AI Studio](https://aistudio.google.com/apikey).
+2. Create `.env.local` from the template and add your key:
+   ```bash
+   cp .env.local.example .env.local
+   ```
+3. Install dependencies and start the development server:
+   ```bash
+   npm install
+   npm run dev
+   ```
+4. Open [http://localhost:3000](http://localhost:3000), choose a sample scenario or paste your own notes, and click **Synthesize**.
 
-```bash
-npm install
-npm run dev
-```
+## Team sharing (optional)
 
-4. Open http://localhost:3000 — load an example program (or paste your own
-   notes / upload a .txt or .md file), hit **Synthesize**, explore the four
-   tabs, then use the export bar to share the brief.
+Syntheses can be saved to a shared workspace so teammates can open, edit, and re-save them. The backend is a free [Supabase](https://supabase.com) project (Postgres + magic-link auth + row-level security):
 
-## Under the hood
+1. Create a Supabase project and run `supabase/migration.sql` in its SQL editor. The script is idempotent—safe to re-run after updates.
+2. Add `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` to `.env.local` (Project Settings → API).
+3. Restart the dev server — a sign-in button, **Save to team**, **Copy share link**, and a **Saved syntheses** tab appear.
 
-Next.js 14 + TypeScript + Tailwind, styled with a Google
-Sustainable-Journeys-inspired theme (Google palette, Roboto, contrail motif;
-no official Google assets). Gemini `gemini-3.6-flash` via the Interactions
-API with schema-based structured output. localStorage persistence — no
-backend DB.
+Any signed-in teammate can see and edit all saved syntheses (last-write-wins); only the author can delete their own. Share links use `/?s=<id>`. Without the Supabase variables, the sharing UI hides and the app behaves as before.
 
-## v2 ideas
+## Tech stack
 
-- Sync extracted actions to Google Sheets / GitHub Issues
-- Multi-document accumulation (delta vs. last week's synthesis)
-- Edit-in-place before export; team sharing with auth
+- **Framework:** Next.js 14 (App Router), TypeScript, Tailwind CSS
+- **Model:** Gemini (`gemini-3.6-flash`) with structured JSON schema output
+- **Storage:** Browser `localStorage` (no database required); optional Supabase (Postgres + Auth + RLS) for team sharing
+- **Deployment:** Vercel. Push to GitHub, import the repo, and set `GEMINI_API_KEY`, `NEXT_PUBLIC_SUPABASE_URL`, and `NEXT_PUBLIC_SUPABASE_ANON_KEY` as environment variables.
+
+## Planned improvements
+
+- Sync action items directly to Google Sheets or GitHub Issues
+- Multi-document delta tracking (compare against prior syntheses)

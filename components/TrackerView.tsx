@@ -1,6 +1,7 @@
 "use client";
 
 import type { SynthesisResult } from "@/lib/gemini";
+import { statusTone } from "./status";
 import { EditableText, EditableSelect, EditedChip, DeleteButton } from "./Editable";
 
 type UpdateFn = (mutator: (draft: SynthesisResult) => void) => void;
@@ -84,7 +85,7 @@ export default function TrackerView({ result, updateResult }: { result: Synthesi
                       <EditableSelect
                         value={a.priority}
                         options={PRIORITIES}
-                        className="text-xs"
+                        tone={statusTone(a.priority)}
                         onCommit={(next) =>
                           updateResult((d) => {
                             d.actions[idx].priority = next as typeof d.actions[number]["priority"];
@@ -157,7 +158,7 @@ export default function TrackerView({ result, updateResult }: { result: Synthesi
                 <EditableSelect
                   value={r.severity}
                   options={PRIORITIES}
-                  className="text-xs"
+                  tone={statusTone(r.severity)}
                   onCommit={(next) =>
                     updateResult((d) => {
                       d.risks[idx].severity = next as typeof d.risks[number]["severity"];
@@ -228,7 +229,7 @@ export default function TrackerView({ result, updateResult }: { result: Synthesi
               <EditableSelect
                 value={dep.status}
                 options={DEP_STATUSES}
-                className="text-xs"
+                tone={statusTone(dep.status)}
                 onCommit={(next) =>
                   updateResult((d) => {
                     d.dependencies[idx].status = next as typeof d.dependencies[number]["status"];

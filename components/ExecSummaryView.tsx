@@ -1,7 +1,7 @@
 "use client";
 
 import type { SynthesisResult } from "@/lib/gemini";
-import { Badge, statusTone } from "./status";
+import { statusTone } from "./status";
 import { EditableText, EditableSelect, EditedChip, DeleteButton } from "./Editable";
 
 type UpdateFn = (mutator: (draft: SynthesisResult) => void) => void;
@@ -46,7 +46,17 @@ export default function ExecSummaryView({ result, updateResult }: { result: Synt
             Leadership brief
           </h3>
           <div className="flex items-center gap-2">
-            <Badge label={momentum} tone={statusTone(momentum)} />
+            <EditableSelect
+              value={momentum}
+              options={MOMENTUM}
+              tone={statusTone(momentum)}
+              onCommit={(next) =>
+                updateResult((d) => {
+                  d.momentum = next as typeof d.momentum;
+                  markScalar(d, "momentum");
+                })
+              }
+            />
             <button
               onClick={copyBrief}
               className="rounded-lg border border-gborder bg-white px-3 py-1 text-xs font-medium text-gink transition hover:bg-gsurface focus:outline-none focus:ring-2 focus:ring-gblue-tint"
@@ -115,7 +125,7 @@ export default function ExecSummaryView({ result, updateResult }: { result: Synt
               <EditableSelect
                 value={s.status}
                 options={EXEC_STATUSES}
-                className="text-xs"
+                tone={statusTone(s.status)}
                 onCommit={(next) =>
                   updateResult((d) => {
                     d.execSummary.statusByWorkstream[idx].status = next as typeof d.execSummary.statusByWorkstream[number]["status"];
