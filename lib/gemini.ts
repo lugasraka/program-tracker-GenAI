@@ -203,6 +203,9 @@ export async function synthesizeProgram(input: string): Promise<SynthesisResult>
       mime_type: "application/json",
       schema: synthesisSchema,
     },
+    generation_config: {
+      thinking_level: "low",
+    },
   });
 
   const text = interaction.output_text ?? "";

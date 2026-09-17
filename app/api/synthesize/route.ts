@@ -3,6 +3,8 @@ import { synthesizeProgram } from "@/lib/gemini";
 
 export const maxDuration = 60;
 
+const RATE_LIMIT_RE = /\b429\b|quota exceeded|rate.?limit/i;
+
 export async function POST(request: Request) {
   try {
     const body = (await request.json()) as { input?: string };
@@ -22,6 +24,15 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Synthesis failed:", error);
     const message = error instanceof Error ? error.message : "Unknown error";
+    if (RATE_LIMIT_RE.test(message)) {
+      return NextResponse.json(
+        {
+          error:
+            "Gemini rate limit reached — the free tier allows about 20 requests per minute. Wait a minute and try again.",
+        },
+        { status: 429 }
+      );
+    }
     return NextResponse.json(
       { error: `Synthesis failed: ${message}` },
       { status: 500 }
