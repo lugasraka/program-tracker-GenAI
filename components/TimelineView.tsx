@@ -113,7 +113,7 @@ export default function TimelineView({ result }: { result: SynthesisResult }) {
             </g>
           ))}
           {nowX !== null && (
-            <line x1={nowX} y1={TOP - 12} x2={nowX} y2={viewH - 12} stroke="#1a73e8" strokeWidth={1.5} strokeDasharray="4 3" />
+            <line x1={nowX} y1={TOP - 12} x2={nowX} y2={viewH - 12} stroke="#026da7" strokeWidth={1.5} strokeDasharray="4 3" />
           )}
           {(() => {
             let y = TOP;
@@ -122,7 +122,7 @@ export default function TimelineView({ result }: { result: SynthesisResult }) {
               y += lane.rows.length * SUB_ROW_H + 18;
               return (
                 <g key={li}>
-                  <text x={8} y={laneTop + 4} fontSize={12} fontWeight={500} fill="#1a73e8">
+                  <text x={8} y={laneTop + 4} fontSize={12} fontWeight={500} fill="#026da7">
                     {lane.workstream}
                   </text>
                   <line x1={8} y1={laneTop + lane.rows.length * SUB_ROW_H + 4} x2={VIEW_W - 10} y2={laneTop + lane.rows.length * SUB_ROW_H + 4} stroke="#f1f3f4" strokeWidth={1} />
@@ -175,7 +175,7 @@ export default function TimelineView({ result }: { result: SynthesisResult }) {
         ))}
         {nowX !== null && (
           <span className="inline-flex items-center gap-1.5">
-            <span className="inline-block h-3 w-0 border-l-2 border-dashed border-[#1a73e8]" />
+            <span className="inline-block h-3 w-0 border-l-2 border-dashed border-[#026da7]" />
             Today
           </span>
         )}
@@ -192,7 +192,7 @@ export default function TimelineView({ result }: { result: SynthesisResult }) {
                 <span className="tnum inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-[9px] font-bold text-white" style={{ backgroundColor: PRIORITY_FILL[e.item.priority] ?? PRIORITY_FILL.Low }}>
                   {e.num}
                 </span>
-                <span className="text-xs font-semibold uppercase tracking-wider text-gblue-hover">{e.lane}</span>
+                <span className="text-xs font-semibold uppercase tracking-wider text-gaccent-hover">{e.lane}</span>
                 <span className="flex-1 text-gink">{e.item.description}</span>
                 <span className="tnum text-xs text-gmuted">
                   {e.item.owner} · due {e.item.due}

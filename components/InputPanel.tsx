@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { sampleScenarios } from "@/lib/sampleData";
 
 type Props = {
@@ -13,6 +13,19 @@ type Props = {
 export default function InputPanel({ input, onInputChange, onSynthesize, isLoading }: Props) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [activeSample, setActiveSample] = useState<string | null>(null);
+  const [isMac, setIsMac] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const ua = typeof navigator !== "undefined" ? navigator.userAgent : "";
+    setIsMac(/Mac|iPhone|iPad/i.test(ua));
+  }, []);
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault();
+      if (!isLoading && input.trim().length > 0) onSynthesize();
+    }
+  }
 
   function loadSample(id: string, content: string) {
     setActiveSample(id);
@@ -39,8 +52,8 @@ export default function InputPanel({ input, onInputChange, onSynthesize, isLoadi
               title={s.description}
               className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition ${
                 activeSample === s.id
-                  ? "border-gblue bg-gblue-tint text-gblue-hover"
-                  : "border-gblue-tint bg-gblue-tint/60 text-gblue-hover hover:border-gblue"
+                  ? "border-gaccent bg-gaccent-tint text-gaccent-hover"
+                  : "border-gaccent-tint bg-gaccent-tint/60 text-gaccent-hover hover:border-gaccent"
               }`}
             >
               {activeSample === s.id ? (
@@ -59,7 +72,7 @@ export default function InputPanel({ input, onInputChange, onSynthesize, isLoadi
         </div>
         <button
           onClick={() => fileRef.current?.click()}
-          className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-gmuted bg-white px-3 py-1.5 text-xs font-medium text-gmuted transition hover:border-gblue hover:text-gblue-hover focus:outline-none focus:ring-2 focus:ring-gblue-tint"
+          className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-gmuted bg-white px-3 py-1.5 text-xs font-medium text-gmuted transition hover:border-gaccent hover:text-gaccent-hover focus:outline-none focus:ring-2 focus:ring-gaccent-tint"
         >
           <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M8 10.5V2.5M8 2.5 5 5.5M8 2.5 11 5.5" />
@@ -80,14 +93,16 @@ export default function InputPanel({ input, onInputChange, onSynthesize, isLoadi
         />
       </div>
       <textarea
+        id="notes-input"
         value={input}
         onChange={(e) => {
           setActiveSample(null);
           onInputChange(e.target.value);
         }}
+        onKeyDown={handleKeyDown}
         placeholder="Paste a status update, meeting notes, transcript, or Slack thread. The copilot extracts decisions, actions, risks, dependencies, and drafts an exec summary."
         rows={10}
-        className="w-full resize-y rounded-lg border border-gborder p-3 font-mono text-sm text-gink placeholder:text-[#80868b] focus:border-gblue focus:outline-none focus:ring-2 focus:ring-gblue-tint"
+        className="w-full resize-y rounded-lg border border-gborder p-3 font-mono text-sm text-gink placeholder:text-[#80868b] focus:border-gaccent focus:outline-none focus:ring-2 focus:ring-gaccent-tint"
       />
       <div className="mt-3 flex items-center justify-between">
         <span className="tnum text-xs text-[#80868b]">
@@ -96,12 +111,17 @@ export default function InputPanel({ input, onInputChange, onSynthesize, isLoadi
         <button
           onClick={onSynthesize}
           disabled={isLoading || input.trim().length === 0}
-          className="inline-flex items-center gap-2 rounded-lg bg-gblue px-5 py-2 text-sm font-medium text-white transition hover:bg-gblue-hover focus:outline-none focus:ring-2 focus:ring-gblue-tint disabled:cursor-not-allowed disabled:opacity-40"
+          className="inline-flex items-center gap-2 rounded-lg bg-gaccent px-5 py-2 text-sm font-medium text-white transition hover:bg-gaccent-hover focus:outline-none focus:ring-2 focus:ring-gaccent-tint disabled:cursor-not-allowed disabled:opacity-40"
         >
           {isLoading && (
             <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
           )}
           {isLoading ? "Synthesizing…" : "Synthesize"}
+          {!isLoading && isMac !== null && (
+            <span className="rounded border border-white/30 bg-white/15 px-1.5 py-0.5 text-[10px] font-normal">
+              {isMac ? "⌘↵" : "Ctrl+↵"}
+            </span>
+          )}
         </button>
       </div>
     </section>

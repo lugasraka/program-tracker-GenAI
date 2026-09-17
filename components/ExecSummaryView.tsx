@@ -40,7 +40,7 @@ export default function ExecSummaryView({ result, updateResult }: { result: Synt
 
   return (
     <div className="space-y-5">
-      <div className="rounded-xl border border-gborder bg-gradient-to-br from-gblue-tint/60 via-white to-ggreen-tint/40 p-5">
+      <div className="rounded-xl border border-gborder bg-gradient-to-br from-gaccent-tint/60 via-white to-ggreen-tint/40 p-5">
         <div className="mb-2 flex items-center justify-between gap-2">
           <h3 className="text-xs font-semibold uppercase tracking-wider text-gmuted">
             Leadership brief
@@ -59,7 +59,7 @@ export default function ExecSummaryView({ result, updateResult }: { result: Synt
             />
             <button
               onClick={copyBrief}
-              className="rounded-lg border border-gborder bg-white px-3 py-1 text-xs font-medium text-gink transition hover:bg-gsurface focus:outline-none focus:ring-2 focus:ring-gblue-tint"
+              className="rounded-lg border border-gborder bg-white px-3 py-1 text-xs font-medium text-gink transition hover:bg-gsurface focus:outline-none focus:ring-2 focus:ring-gaccent-tint"
             >
               Copy as Markdown
             </button>
@@ -111,7 +111,7 @@ export default function ExecSummaryView({ result, updateResult }: { result: Synt
                 d.execSummary.statusByWorkstream.push({ workstream: "New workstream", status: "On track", note: "", edited: true });
               })
             }
-            className="rounded-full border border-gborder px-2 py-0.5 text-xs font-medium text-gmuted transition hover:border-gblue hover:text-gblue-hover focus:outline-none focus:ring-2 focus:ring-gblue-tint"
+            className="rounded-full border border-gborder px-2 py-0.5 text-xs font-medium text-gmuted transition hover:border-gaccent hover:text-gaccent-hover focus:outline-none focus:ring-2 focus:ring-gaccent-tint"
           >
             + Add
           </button>
@@ -176,7 +176,7 @@ export default function ExecSummaryView({ result, updateResult }: { result: Synt
                   d.execSummary.topRisks.push("");
                 })
               }
-              className="rounded-full border border-gborder px-2 py-0.5 text-xs font-medium text-gmuted transition hover:border-gblue hover:text-gblue-hover focus:outline-none focus:ring-2 focus:ring-gblue-tint"
+              className="rounded-full border border-gborder px-2 py-0.5 text-xs font-medium text-gmuted transition hover:border-gaccent hover:text-gaccent-hover focus:outline-none focus:ring-2 focus:ring-gaccent-tint"
             >
               + Add
             </button>
@@ -215,7 +215,7 @@ export default function ExecSummaryView({ result, updateResult }: { result: Synt
                   d.execSummary.asks.push("");
                 })
               }
-              className="rounded-full border border-gborder px-2 py-0.5 text-xs font-medium text-gmuted transition hover:border-gblue hover:text-gblue-hover focus:outline-none focus:ring-2 focus:ring-gblue-tint"
+              className="rounded-full border border-gborder px-2 py-0.5 text-xs font-medium text-gmuted transition hover:border-gaccent hover:text-gaccent-hover focus:outline-none focus:ring-2 focus:ring-gaccent-tint"
             >
               + Add
             </button>

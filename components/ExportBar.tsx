@@ -80,13 +80,13 @@ export default function ExportBar({ result, userEmail, savedId, onSaved }: Props
     <div className="mb-4 flex flex-wrap items-center gap-2">
       <button
         onClick={() => void handleCopy()}
-        className="rounded-lg bg-gink px-4 py-1.5 text-sm font-medium text-white transition hover:bg-[#3c4043] focus:outline-none focus:ring-2 focus:ring-gblue-tint"
+        className="rounded-lg border border-gink bg-white px-4 py-1.5 text-sm font-medium text-gink transition hover:bg-gsurface focus:outline-none focus:ring-2 focus:ring-gaccent-tint"
       >
         Copy for email
       </button>
       <button
         onClick={handleDownload}
-        className="rounded-lg border border-gborder bg-white px-4 py-1.5 text-sm font-medium text-gink transition hover:bg-gsurface focus:outline-none focus:ring-2 focus:ring-gblue-tint"
+        className="rounded-lg border border-gborder bg-white px-4 py-1.5 text-sm font-medium text-gink transition hover:bg-gsurface focus:outline-none focus:ring-2 focus:ring-gaccent-tint"
       >
         Download .md brief
       </button>
@@ -95,14 +95,14 @@ export default function ExportBar({ result, userEmail, savedId, onSaved }: Props
           <button
             onClick={() => void handleSave()}
             disabled={saving}
-            className="rounded-lg bg-gblue px-4 py-1.5 text-sm font-medium text-white transition hover:bg-gblue-hover disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-gblue-tint"
+            className="rounded-lg border border-gaccent bg-white px-4 py-1.5 text-sm font-medium text-gaccent-dark transition hover:bg-gaccent-tint/50 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-gaccent-tint"
           >
             {saving ? "Saving…" : savedId ? "Update in team space" : "Save to team"}
           </button>
           {savedId && (
             <button
               onClick={() => void handleCopyShareLink()}
-              className="rounded-lg border border-gborder bg-white px-4 py-1.5 text-sm font-medium text-gink transition hover:bg-gsurface focus:outline-none focus:ring-2 focus:ring-gblue-tint"
+              className="rounded-lg border border-gborder bg-white px-4 py-1.5 text-sm font-medium text-gink transition hover:bg-gsurface focus:outline-none focus:ring-2 focus:ring-gaccent-tint"
             >
               Copy share link
             </button>

@@ -40,7 +40,7 @@ export function EditableText({ value, onCommit, multiline = false, className = "
 
   if (editing) {
     const shared =
-      "w-full rounded border border-gblue bg-white px-1.5 py-0.5 text-inherit [font:inherit] text-gink focus:outline-none focus:ring-2 focus:ring-gblue-tint";
+      "w-full rounded border border-gaccent bg-white px-1.5 py-0.5 text-inherit [font:inherit] text-gink focus:outline-none focus:ring-2 focus:ring-gaccent-tint";
     return multiline ? (
       <textarea
         ref={inputRef as React.Ref<HTMLTextAreaElement>}
@@ -77,7 +77,7 @@ export function EditableText({ value, onCommit, multiline = false, className = "
       onKeyDown={(e) => {
         if (e.key === "Enter") setEditing(true);
       }}
-      className={`cursor-text rounded transition hover:bg-gblue-tint/70 ${className}`}
+      className={`cursor-text rounded transition hover:bg-gaccent-tint/70 ${className}`}
     >
       {value || <span className="text-[#80868b]">{placeholder ?? "Click to edit"}</span>}
     </span>
@@ -110,7 +110,7 @@ export function EditableSelect({ value, options, onCommit, className = "", tone 
           if (e.target.value !== value) onCommit(e.target.value);
         }}
         onBlur={() => setEditing(false)}
-        className="rounded border border-gblue bg-white px-1 py-0 text-xs text-gink focus:outline-none focus:ring-2 focus:ring-gblue-tint"
+        className="rounded border border-gaccent bg-white px-1 py-0 text-xs text-gink focus:outline-none focus:ring-2 focus:ring-gaccent-tint"
       >
         {options.map((o) => (
           <option key={o} value={o}>

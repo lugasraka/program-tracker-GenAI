@@ -9,11 +9,11 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        gblue: {
-          DEFAULT: "#4285F4",
-          hover: "#1a73e8",
-          dark: "#174ea6",
-          tint: "#e8f0fe",
+        gaccent: {
+          DEFAULT: "#026da7",
+          hover: "#025a87",
+          dark: "#014a71",
+          tint: "#e3f0f8",
         },
         ggreen: {
           DEFAULT: "#34A853",
@@ -38,6 +38,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["var(--font-roboto)", "Roboto", "Arial", "sans-serif"],
+        opensans: ["var(--font-open-sans)", "Open Sans", "Arial", "sans-serif"],
       },
     },
   },

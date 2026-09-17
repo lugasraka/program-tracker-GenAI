@@ -75,7 +75,7 @@ export default function SavedList({ userId, userEmail, currentSavedId, onOpen }:
   if (rows === null) {
     return (
       <div className="flex flex-col items-center gap-3 py-16 text-gmuted">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-gblue-tint border-t-gblue" />
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-gaccent-tint border-t-gaccent" />
         <p className="text-sm">Loading team syntheses…</p>
       </div>
     );
@@ -96,7 +96,7 @@ export default function SavedList({ userId, userEmail, currentSavedId, onOpen }:
           <div className="flex-1">
             <button
               onClick={() => onOpen(row)}
-              className="text-left text-sm font-medium text-gblue-hover hover:underline"
+              className="text-left text-sm font-medium text-gaccent-hover hover:underline"
             >
               {row.program_name}
             </button>

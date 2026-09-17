@@ -42,7 +42,7 @@ export default function AuthButton({ auth }: Props) {
   if (auth.user) {
     const initial = (auth.user.email || "?").charAt(0).toUpperCase();
     return (
-      <div className="flex items-center gap-2 rounded-full border border-gborder bg-white py-1 pl-1 pr-3 shadow-sm">
+      <div className="flex items-center gap-2 rounded-full border border-white/70 bg-white/70 py-1 pl-1 pr-3 shadow-sm backdrop-blur-sm">
         <span className="flex h-6 w-6 items-center justify-center rounded-full bg-ggreen text-xs font-bold text-white">
           {initial}
         </span>
@@ -66,7 +66,7 @@ export default function AuthButton({ auth }: Props) {
     <div className="relative" ref={panelRef}>
       <button
         onClick={() => setOpen((v) => !v)}
-        className="rounded-full bg-gblue px-4 py-1.5 text-xs font-medium text-white transition hover:bg-gblue-hover focus:outline-none focus:ring-2 focus:ring-gblue-tint"
+        className="rounded-full border border-gink/20 bg-white/70 px-4 py-1.5 text-xs font-medium text-gink shadow-sm backdrop-blur-sm transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-gaccent-tint"
       >
         Sign in
       </button>
@@ -88,12 +88,12 @@ export default function AuthButton({ auth }: Props) {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@company.com"
-                className="w-full rounded-lg border border-gborder px-3 py-2 text-sm text-gink placeholder:text-[#80868b] focus:border-gblue focus:outline-none focus:ring-2 focus:ring-gblue-tint"
+                className="w-full rounded-lg border border-gborder px-3 py-2 text-sm text-gink placeholder:text-[#80868b] focus:border-gaccent focus:outline-none focus:ring-2 focus:ring-gaccent-tint"
               />
               <button
                 type="submit"
                 disabled={auth.magicLinkState === "sending"}
-                className="w-full rounded-lg bg-gblue px-3 py-2 text-sm font-medium text-white transition hover:bg-gblue-hover disabled:opacity-50"
+                className="w-full rounded-lg bg-gaccent px-3 py-2 text-sm font-medium text-white transition hover:bg-gaccent-hover disabled:opacity-50"
               >
                 {auth.magicLinkState === "sending" ? "Sending…" : "Send magic link"}
               </button>

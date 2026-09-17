@@ -29,7 +29,7 @@ function SectionHeader({ title, count, onAdd }: { title: string; count: number; 
       {onAdd && (
         <button
           onClick={onAdd}
-          className="rounded-full border border-gborder px-2 py-0.5 text-xs font-medium text-gmuted transition hover:border-gblue hover:text-gblue-hover focus:outline-none focus:ring-2 focus:ring-gblue-tint"
+          className="rounded-full border border-gborder px-2 py-0.5 text-xs font-medium text-gmuted transition hover:border-gaccent hover:text-gaccent-hover focus:outline-none focus:ring-2 focus:ring-gaccent-tint"
         >
           + Add
         </button>
@@ -76,7 +76,7 @@ export default function TrackerView({ result, updateResult }: { result: Synthesi
         <div className="space-y-4">
           {actionsByWs.map(([ws, items]) => (
             <div key={ws}>
-              <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-gblue-hover">{ws}</p>
+              <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-gaccent-hover">{ws}</p>
               <ul className="divide-y divide-ggrid overflow-hidden rounded-lg border border-gborder bg-white">
                 {items.map((a) => {
                   const idx = result.actions.indexOf(a);
@@ -168,7 +168,7 @@ export default function TrackerView({ result, updateResult }: { result: Synthesi
                 />
                 <EditableText
                   value={r.workstream}
-                  className="text-xs font-medium uppercase tracking-wider text-gblue-hover"
+                  className="text-xs font-medium uppercase tracking-wider text-gaccent-hover"
                   onCommit={(next) =>
                     updateResult((d) => {
                       d.risks[idx].workstream = next;
@@ -356,7 +356,7 @@ export default function TrackerView({ result, updateResult }: { result: Synthesi
         <div className="space-y-4">
           {questionsByWs.map(([ws, items]) => (
             <div key={ws}>
-              <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-gblue-hover">{ws}</p>
+              <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-gaccent-hover">{ws}</p>
               <ul className="list-inside list-disc space-y-1 rounded-lg border border-gborder bg-white px-3 py-2.5 text-sm text-gink">
                 {items.map((q) => {
                   const idx = result.openQuestions.indexOf(q);
