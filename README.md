@@ -4,7 +4,7 @@ A program management tool for Google Search Sustainable Journeys (Travel Impact 
 
 **Live Demo:** [https://program-tracker-gen-ai.vercel.app/](https://program-tracker-gen-ai.vercel.app/)
 
-![TIM Program Hub Screenshot](public/screenshot2.png)
+![TIM Program Hub Screenshot](public/screenshot3.png)
 
 ## Features
 
